@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Fetch API with User Input, Token, and Response Display</title>
+</head>
+<body>
+
+<label for="itemUrl">Item URL:</label>
+<input type="text" id="itemUrl" name="itemUrl" placeholder="http://쿠팡주소"><br><br>
+
+<label for="hobby">Hobby:</label>
+<input type="text" id="hobby" name="hobby" placeholder="Hobby"><br><br>
+
+<label for="bearerToken">Bearer Token:</label>
+<input type="text" id="bearerToken" name="bearerToken" placeholder="Bearer Token"><br><br>
+
+<button id="sendDataButton">데이터 보내기</button>
+
+<div id="response"></div>
+
+<script>
+    function getTokenFromLocalStorage() {
+        return localStorage.getItem('bearerToken') || '';
+    }
+
+    function setTokenToLocalStorage(token) {
+        localStorage.setItem('bearerToken', token);
+    }
+
+    function getHobbyFromLocalStorage() {
+        return localStorage.getItem('hobby') || '';
+    }
+
+    function setHobbyToLocalStorage(hobby) {
+        localStorage.setItem('hobby', hobby);
+    }
+
+    document.getElementById('bearerToken').value = getTokenFromLocalStorage();
+    document.getElementById('hobby').value = getHobbyFromLocalStorage();
+
+    document.getElementById('sendDataButton').addEventListener('click', function() {
+        const itemUrlValue = document.getElementById('itemUrl').value;
+        const bearerTokenValue = document.getElementById('bearerToken').value;
+        const hobbyValue = document.getElementById('hobby').value;
+
+        setTokenToLocalStorage(bearerTokenValue);
+        setHobbyToLocalStorage(hobbyValue);
+
+        const data = {
+            hobbyValue: hobbyValue,
+            itemUrl: itemUrlValue
+        };
+
+        fetch('https://api.uju-lime.shop/api/items/enroll', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${bearerTokenValue}`
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Success:', data);
+            document.getElementById('response').innerText = JSON.stringify(data, null, 2); 
+        })
+        .catch((error) => {
+            console.error('Error:', error);
+            document.getElementById('response').innerText = 'Error: ' + error;
+        });
+    });
+</script>
+
+</body>
+</html>

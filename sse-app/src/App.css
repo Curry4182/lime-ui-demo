@@ -1,0 +1,46 @@
+.app-container {
+  font-family: Arial, sans-serif;
+  margin: 0 auto;
+  padding: 20px;
+  max-width: 1200px;
+}
+
+.button-container {
+  display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
+}
+
+.connect-button, .disconnect-button {
+  padding: 10px 15px;
+  margin: 0 10px;
+  border: none;
+  border-radius: 5px;
+  background-color: #007bff;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.disconnect-button {
+  background-color: #dc3545;
+}
+
+.connect-button:hover, .disconnect-button:hover {
+  background-color: #0056b3;
+}
+
+.messages-container {
+  border: 1px solid #ccc;
+  padding: 15px;
+  height: 600px;
+  overflow-y: auto;
+}
+
+.message {
+  background-color: #f8f9fa;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+}
