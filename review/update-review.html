@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Review Update Form</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            padding: 20px;
+        }
+        .container {
+            background: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 500px;
+            margin: auto;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        input[type=text], input[type=number], textarea, input[type=file] {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            border: 1px solid #ddd;
+        }
+        input[type=submit], button {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        input[type=submit]:hover, button:hover {
+            background-color: #218838;
+        }
+        #responseDisplay {
+            background-color: #e9ecef;
+            padding: 10px;
+            margin-top: 20px;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <label for="apiUrl">API URL:</label>
+        <input type="text" id="apiUrl" placeholder="Enter API URL for review update" required><br><br>
+
+        <label for="jwtToken">JWT Token:</label>
+        <input type="text" id="jwtToken" placeholder="Enter JWT Token" required><br><br>
+
+        <form id="reviewForm" enctype="multipart/form-data">
+            <label for="rating">Rating:</label>
+            <input type="number" id="rating" name="rating" min="1" max="5" required><br><br>
+
+            <label for="content">Review Content:</label>
+            <textarea id="content" name="content" required></textarea><br><br>
+
+            <label for="images">Upload New Images:</label>
+            <input type="file" id="images" name="multipartReviewImages" accept="image/*" multiple><br><br>
+
+            <label for="urlsToRemove">URLs to Remove:</label>
+            <textarea id="urlsToRemove" name="reviewItemUrlsToRemove"></textarea><br><br>
+
+            <input type="submit" value="Update Review">
+        </form>
+
+        <div id="responseDisplay"></div>
+    </div>
+
+    <script>
+        document.getElementById('reviewForm').addEventListener('submit', function(event) {
+            event.preventDefault();
+
+            let apiUrl = document.getElementById('apiUrl').value;
+            let jwtToken = document.getElementById('jwtToken').value;
+            let formData = new FormData(this);
+
+            if (!apiUrl || !jwtToken) {
+                alert('API URL or JWT Token is not set.');
+                return;
+            }
+
+            fetch(apiUrl, {
+                method: 'PUT',
+                headers: {
+                    'Authorization': 'Bearer ' + jwtToken
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('responseDisplay').innerText = JSON.stringify(data, null, 2);
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                document.getElementById('responseDisplay').innerText = 'Error: ' + error;
+            });
+        });
+    </script>
+</body>
+</html>
